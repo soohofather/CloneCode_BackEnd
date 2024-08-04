@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.modelmapper.internal.bytebuddy.dynamic.loading.InjectionClassLoader.Strategy;
 
 @Entity
 @Getter
@@ -38,6 +37,10 @@ public class ProductEntity {
     private String pdesc;
 
     private boolean delFlag;
+
+    public void changeDel(boolean delFlag) {
+        this.delFlag = delFlag;
+    }
 
     @ElementCollection
     @Builder.Default
