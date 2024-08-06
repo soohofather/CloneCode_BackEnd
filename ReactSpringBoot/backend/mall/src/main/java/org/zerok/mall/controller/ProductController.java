@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.zerok.mall.dto.PageRequestDto;
+import org.zerok.mall.dto.PageResponseDto;
 import org.zerok.mall.dto.ProductDto;
+import org.zerok.mall.service.ProductService;
 import org.zerok.mall.util.CustomFileUtil;
 
 @RestController
@@ -22,6 +25,7 @@ import org.zerok.mall.util.CustomFileUtil;
 public class ProductController {
 
     private final CustomFileUtil fileUtil;
+    private final ProductService productService;
 
     @PostMapping("/")
     public Map<String, String> register(ProductDto productDto) {
@@ -44,6 +48,12 @@ public class ProductController {
             @PathVariable("fileName") String fileName
     ) {
         return fileUtil.getFile((fileName));
+    }
+
+    @GetMapping("/list")
+    public PageResponseDto<ProductDto> list(PageRequestDto pageRequestDto) {
+
+        return productService.getList(pageRequestDto);
     }
 
 }

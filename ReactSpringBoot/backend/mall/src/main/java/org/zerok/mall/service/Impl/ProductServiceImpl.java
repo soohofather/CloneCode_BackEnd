@@ -37,12 +37,10 @@ public class ProductServiceImpl implements ProductService {
         // Object[] => 0 product, 1 productImage
         List<ProductDto> dtoList = result.get().map(arr -> {
 
-            ProductDto productDto = null;
-
             ProductEntity productEntity = (ProductEntity) arr[0];
             ProductImage productImage = (ProductImage) arr[1];
 
-            productDto = ProductDto.builder()
+            ProductDto productDto = ProductDto.builder()
                     .pno(productEntity.getPno())
                     .pname(productEntity.getPname())
                     .pdesc(productEntity.getPdesc())
@@ -64,4 +62,38 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    public Long register(ProductDto productDto) {
+
+        ProductEntity productEntity = dtoToEntity(productDto);
+
+        log.info("---------------------------------------");
+        log.info(productEntity);
+        log.info(productEntity.getImageList());
+
+        Long pno = productRepository.save(productEntity).getPno();
+
+        return pno;
+    }
+
+    private ProductEntity dtoToEntity(ProductDto productDto) {
+
+        ProductEntity productEntity = ProductEntity.builder()
+                .pno(productDto.getPno())
+                .pname(productDto.getPname())
+                .pdesc(productDto.getPdesc())
+                .price(productDto.getPrice())
+                .build();
+
+        List<String> uploadFileNames = productDto.getUploadedFileNames();
+
+        if(uploadFileNames == null || uploadFileNames.size() == 0) {
+            return productEntity;
+        }
+
+        uploadFileNames.forEach(fileName -> {
+            productEntity.addImageString(fileName);
+        });
+
+        return productEntity;
+    }
 }

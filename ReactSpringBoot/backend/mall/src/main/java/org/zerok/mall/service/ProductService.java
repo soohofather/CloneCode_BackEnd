@@ -10,4 +10,6 @@ public interface ProductService {
 
     PageResponseDto<ProductDto> getList(PageRequestDto pageRequestDto);
 
+    Long register(ProductDto productDto);
+
 }
