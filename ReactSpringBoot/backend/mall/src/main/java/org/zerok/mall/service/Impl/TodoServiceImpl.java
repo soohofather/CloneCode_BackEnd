@@ -1,4 +1,4 @@
-package org.zerok.mall.service;
+package org.zerok.mall.service.Impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +17,13 @@ import org.zerok.mall.dto.PageResponseDto;
 import org.zerok.mall.dto.TodoDto;
 import org.zerok.mall.entity.TodoEntity;
 import org.zerok.mall.repository.TodoRepository;
+import org.zerok.mall.service.TodoService;
 
 @Service
 @Transactional
 @Log4j2
 @RequiredArgsConstructor
-public class TodoServiceImpl implements TodoService{
+public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
 
