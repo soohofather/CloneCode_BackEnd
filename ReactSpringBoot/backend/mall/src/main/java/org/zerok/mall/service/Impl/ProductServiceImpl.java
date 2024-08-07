@@ -1,6 +1,7 @@
 package org.zerok.mall.service.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -75,6 +76,40 @@ public class ProductServiceImpl implements ProductService {
         return pno;
     }
 
+    @Override
+    public ProductDto get(Long pno) {
+
+        Optional<ProductEntity> result = productRepository.findById(pno);
+
+        ProductEntity productEntity = result.orElseThrow();
+
+        return entityToDto(productEntity);
+    }
+
+    private ProductDto entityToDto(ProductEntity productEntity) {
+
+        ProductDto productDto = ProductDto.builder()
+                .pno(productEntity.getPno())
+                .pname(productEntity.getPname())
+                .pdesc(productEntity.getPdesc())
+                .price(productEntity.getPrice())
+                .delFlag(productEntity.isDelFlag())
+                .build();
+
+        List<ProductImage> imageList = productEntity.getImageList();
+
+        if(imageList == null || imageList.isEmpty()) {
+            return productDto;
+        }
+
+        List<String> fileNameList = imageList.stream().map(productImage ->
+                productImage.getFileName()).toList();
+
+        productDto.setUploadedFileNames(fileNameList);
+
+        return productDto;
+    }
+
     private ProductEntity dtoToEntity(ProductDto productDto) {
 
         ProductEntity productEntity = ProductEntity.builder()
@@ -82,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
                 .pname(productDto.getPname())
                 .pdesc(productDto.getPdesc())
                 .price(productDto.getPrice())
+                .delFlag(productDto.isDelFlag())
                 .build();
 
         List<String> uploadFileNames = productDto.getUploadedFileNames();
