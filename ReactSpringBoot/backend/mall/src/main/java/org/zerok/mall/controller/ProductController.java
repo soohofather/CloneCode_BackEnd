@@ -2,6 +2,7 @@ package org.zerok.mall.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,4 +80,46 @@ public class ProductController {
     ) {
         return productService.get(pno);
     }
+
+    @PutMapping("/{pno}")
+    public Map<String, String> modify(
+            @PathVariable Long pno,
+            ProductDto productDto
+    ) {
+
+        productDto.setPno(pno);
+
+        // 기존 상품
+        ProductDto oldProductDto = productService.get(pno);
+
+        // 파일 업로드
+        List<MultipartFile> files = productDto.getFiles();
+        List<String> currentUploadFileNames = fileUtil.saveFiles(files);
+
+        // 유지 파일
+        List<String> uploadedFileNames = productDto.getUploadedFileNames();
+
+        if(currentUploadFileNames != null && !currentUploadFileNames.isEmpty()) {
+
+            uploadedFileNames.addAll(currentUploadFileNames);
+        }
+
+        productService.modify(productDto);
+
+        List<String> oldFileNames = oldProductDto.getUploadedFileNames();
+
+        if(oldFileNames != null && oldFileNames.size() > 0) {
+
+            List<String> removeFiles =  oldFileNames
+                    .stream()
+                    .filter(filename -> uploadedFileNames.indexOf(filename) == -1).collect(Collectors.toList());
+
+            fileUtil.deleteFiles(removeFiles);
+        } // end if
+
+        return Map.of("RESULT", "SUCCESS");
+
+    }
+
+
 }
