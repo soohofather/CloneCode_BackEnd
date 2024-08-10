@@ -16,4 +16,6 @@ public interface ProductService {
 
     void modify(ProductDto productDto);
 
+    void remove(Long pno);
+
 }

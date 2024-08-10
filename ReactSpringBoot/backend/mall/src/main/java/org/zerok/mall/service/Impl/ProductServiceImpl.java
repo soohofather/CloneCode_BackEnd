@@ -115,6 +115,13 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(productEntity);
     }
 
+    @Override
+    public void remove(Long pno) {
+
+        productRepository.deleteById(pno);
+
+    }
+
     private ProductDto entityToDto(ProductEntity productEntity) {
 
         ProductDto productDto = ProductDto.builder()
