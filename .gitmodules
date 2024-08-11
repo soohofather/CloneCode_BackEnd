@@ -1,6 +1,0 @@
-[submodule "ReactSpringBoot/ReactSpringBoot/backend"]
-	path = ReactSpringBoot/ReactSpringBoot/backend
-	url = https://github.com/soohofather/ClonCoding.git
-[submodule "ReactSpringBoot/ReactSpringBoot/frontend"]
-	path = ReactSpringBoot/ReactSpringBoot/frontend
-	url = https://github.com/soohofather/ClonCoding.git
