@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.zerok.mall.dto.MemberDto;
+import org.zerok.mall.util.JwtUtil;
 
 @Log4j2
 public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -26,8 +27,11 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         Map<String, Object> claims = memberDto.getClaims();
 
-        claims.put("accessToken", "");
-        claims.put("refreshToken", "");
+        String accessToken = JwtUtil.generateToken(claims, 10);
+        String refreshToken = JwtUtil.generateToken(claims, 60*24);
+
+        claims.put("accessToken", accessToken);
+        claims.put("refreshToken", refreshToken);
 
         Gson gson = new Gson();
 
