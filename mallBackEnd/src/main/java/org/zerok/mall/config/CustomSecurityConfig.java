@@ -6,12 +6,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.zerok.mall.security.handler.ApiLoginFailHandler;
+import org.zerok.mall.security.handler.ApiLoginSuccessHandler;
 
 @Configuration
 @Log4j2
@@ -27,10 +30,19 @@ public class CustomSecurityConfig {
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
         });
 
+        // 세션 만들지마!
+        http.sessionManagement(httpSecuritySessionManagementConfigurer -> {
+            httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        });
+
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
-        http.formLogin(config ->
-                config.loginPage("/api/member/login"));
+        http.formLogin(config -> {
+                config.loginPage("/api/member/login");
+                config.successHandler(new ApiLoginSuccessHandler());
+                config.failureHandler(new ApiLoginFailHandler());
+        });
+
 
         return http.build();
     }
