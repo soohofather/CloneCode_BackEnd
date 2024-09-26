@@ -7,24 +7,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.zerok.mall.util.CustomJwtException;
 
 @RestControllerAdvice
 public class CustomControllerAdvice {
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<?> notExist(NoSuchElementException e) {
+    protected ResponseEntity<?> notExist(NoSuchElementException e) {
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(Map.of("msg", e.getMessage()));
+        String msg = e.getMessage();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg", msg));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> notExist(MethodArgumentNotValidException e) {
+    protected ResponseEntity<?> handleIllegalArgumentException(MethodArgumentNotValidException e) {
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_ACCEPTABLE)
-                .body(Map.of("msg", e.getMessage()));
+        String msg = e.getMessage();
+
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("msg", msg));
+    }
+
+    @ExceptionHandler(CustomJwtException.class)
+    protected ResponseEntity<?> handleJWTException(CustomJwtException e) {
+
+        String msg = e.getMessage();
+
+        return ResponseEntity.ok().body(Map.of("error", msg));
     }
 
 }
