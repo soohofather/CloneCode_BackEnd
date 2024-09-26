@@ -3,7 +3,6 @@ package org.zerok.mall.config;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.zerok.mall.controller.formatter.LocalDateFormatter;
 
@@ -20,11 +19,11 @@ public class CustomServletConfig implements WebMvcConfigurer {
         registry.addFormatter(new LocalDateFormatter());
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .maxAge(500)
-                .allowedMethods("GET","POST","PUT","DELETE","HEAD","OPTIONS")
-                .allowedOrigins("http://localhost:3000");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .maxAge(500)
+//                .allowedMethods("GET","POST","PUT","DELETE","HEAD","OPTIONS")
+//                .allowedOrigins("http://localhost:3000");
+//    }
 }
