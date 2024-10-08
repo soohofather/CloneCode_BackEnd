@@ -52,4 +52,25 @@ public class MemberDto extends User {
         return dataMap;
     }
 
+    public static class KakaoUserInfo {
+        private String email;
+        private String nickname;
+
+        // 생성자
+        public KakaoUserInfo(String email, String nickname) {
+            this.email = email;
+            this.nickname = nickname;
+        }
+
+        // Getter
+        public String getEmail() {
+            return email;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+    }
+
+
 }
