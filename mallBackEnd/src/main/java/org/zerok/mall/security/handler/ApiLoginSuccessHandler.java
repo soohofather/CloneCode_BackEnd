@@ -27,11 +27,11 @@ public class ApiLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         Map<String, Object> claims = memberDto.getClaims();
 
-        String accessToken = JwtUtil.generateToken(claims, 10);
-        String refreshToken = JwtUtil.generateToken(claims, 60*24);
+        String jwtAccessToken = JwtUtil.generateToken(claims, 10);
+        String jwtRefreshToken = JwtUtil.generateToken(claims, 60*24);
 
-        claims.put("accessToken", accessToken);
-        claims.put("refreshToken", refreshToken);
+        claims.put("accessToken", jwtAccessToken);
+        claims.put("refreshToken", jwtRefreshToken);
 
         Gson gson = new Gson();
 
