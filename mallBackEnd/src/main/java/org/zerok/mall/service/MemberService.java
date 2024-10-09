@@ -11,7 +11,7 @@ public interface MemberService {
 
     MemberDto getKakaoMember(String accessToken);
 
-    default MemberDto entityToDTO(MemberEntity member) {
+    default MemberDto entityToDto(MemberEntity member) {
 
         return new MemberDto(
                 member.getEmail(),

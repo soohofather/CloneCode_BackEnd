@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.zerok.mall.dto.MemberDto;
-import org.zerok.mall.dto.MemberDto.KakaoUserInfo;
 import org.zerok.mall.entity.MemberEntity;
 import org.zerok.mall.entity.MemberRole;
 import org.zerok.mall.repository.MemberRepository;
@@ -41,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
         //기존의 회원
         if(result.isPresent()){
 
-            return entityToDTO(result.get());
+           return entityToDto(result.get());
         }
 
         //회원이 아니었다면
@@ -50,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity socialMember = makeSocialMember(kakaoUserInfo);
         memberRepository.save(socialMember);
 
-        return entityToDTO(socialMember);
+        return entityToDto(socialMember);
     }
 
     private MemberDto.KakaoUserInfo getEmailFromKakaoAccessToken(String accessToken) {
@@ -75,12 +74,12 @@ public class MemberServiceImpl implements MemberService {
         LinkedHashMap<String, LinkedHashMap> bodyMap = response.getBody();
 
         LinkedHashMap<String, String> kakaoAccount = bodyMap.get("kakao_account");
-        LinkedHashMap<String, String> profile = bodyMap.get("profile");
+        LinkedHashMap<String, String> properties = bodyMap.get("properties");
 
         log.info("------------------------------");
 
         String email = kakaoAccount.get("email");
-        String nickname = profile.get("nickname");
+        String nickname = properties.get("nickname");
 
         return new MemberDto.KakaoUserInfo(email, nickname);
     }
